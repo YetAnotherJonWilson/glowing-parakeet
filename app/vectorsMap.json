@@ -1,0 +1,55 @@
+{
+  "Attributes": {
+    "Parameters to file paths": ["insecure server-side paths"],
+    "Admin URL exposed": ["broken access control"],
+    "Parameter-based access control": ["insecure user-controlled values/IDOR"],
+    "API endpoint in request body": ["server-side access controls bypassed"],
+    "File uploads": ["insufficient file upload checks"],
+    "URL Parameters": [
+      "unsanitized params as OS command arguments",
+      "unsanitized SQL inputs",
+      "unsanitized URL params reflected in html page"
+    ],
+    "Text Inputs": [
+      "unsanitized SQL inputs",
+      "unsanitized inputs reflected in html page"
+    ],
+    "Open API documentation": ["insecure API endpoints"],
+    "Basic Authentication": ["basic auth, no csrf defenses"],
+    "Authn: repeated same cookie value": ["guessable cookie hash algorithm"],
+    "Authn: username semi-duplicates allowed": [
+      "no case check on db",
+      "spaces ignored on db"
+    ],
+    "Redirect": ["leaked info in 3xx response body"]
+  },
+  "Potential vulnerabilities": {
+    "insecure server-side paths": ["path traversal"],
+    "broken access control": [
+      "privilege escalation (invoke admin functionality)"
+    ],
+    "insecure user-controlled values/IDOR": [
+      "privilege escalation (alter value)"
+    ],
+    "server-side access controls bypassed": ["SSRF"],
+    "insufficient file upload checks": ["upload malicious script"],
+    "unsanitized params as OS command arguments": ["OS command injection"],
+    "unsanitized SQL inputs": ["SQLi"],
+    "insecure API endpoints": ["Invoke API functionality"],
+    "basic auth, no csrf defenses": ["CSRF"],
+    "guessable cookie hash algorithm": [
+      "privilege escalation (cookie forgery)"
+    ],
+    "no case check on db": [
+      "privilege escalation (duplicate case-insensitive username)"
+    ],
+    "spaces ignored on db": [
+      "privilege escalation (duplicate username, add space)"
+    ],
+    "leaked info in 3xx response body": [
+      "inspect 3xx response body for leaked info"
+    ],
+    "unsanitized inputs reflected in html page": ["rXSS"],
+    "unsanitized URL params reflected in html page": ["rXSS"]
+  }
+}

@@ -1,0 +1,5 @@
+/node_modules
+.prettierrc.json
+.DS_Store
+asset-mapping.code-workspace
+/public/program.json

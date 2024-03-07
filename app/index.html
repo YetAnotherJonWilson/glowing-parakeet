@@ -1,0 +1,133 @@
+<html>
+  <head>
+    <title>Bug Bounty Program: Asset Map</title>
+    <link href="output.css" rel="stylesheet" />
+  </head>
+  <body>
+    <main id="main" class="m-10">
+      <div class="text-3xl">
+        Bug Bounty Program:
+        <span class="mr-1" id="program-name"></span>
+        <button id="edit-program-name" class="text-2xl" onclick="editName()">
+          &#x270E;
+        </button>
+      </div>
+      <div class="mb-5 text-3xl">Asset Map</div>
+      <button class="text-2xl mb-5" onclick="openAddHostnameDialog('top')">
+        Add New Hostname &#x2B;
+      </button>
+      <div id="top-of-list"></div>
+    </main>
+    <div
+      id="attribute-selector"
+      class="hidden absolute h-full w-full left-1/4 top-1/4"
+    >
+      <div
+        class="relative bg-slate-100 h-2/3 w-1/2 rounded-2xl border border-solid border-blue-900 shadow-slate-300 shadow-lg"
+      >
+        <p
+          id="attributes-list-header"
+          class="text-xl p-4 font-bold text-indigo-700"
+        >
+          Attribute Selector
+        </p>
+        <div class="tobeAttrList"></div>
+        <button
+          id="add-attributes-ok"
+          class="absolute bottom-6 right-16 bg-indigo-500 py-4 px-10 rounded-xl text-white"
+        >
+          OK
+        </button>
+      </div>
+    </div>
+    <div
+      id="add-new-hostname"
+      class="hidden absolute h-full w-full left-1/4 top-1/3"
+    >
+      <div
+        class="relative bg-slate-300 h-1/3 w-1/2 rounded-2xl border border-solid border-blue-900 shadow-slate-300 shadow-lg"
+      >
+        <label for="hostname" class="text-xl p-4 font-bold text-blue-400">
+          Add New Hostname after <span id="new-hostname-location"></span>
+        </label>
+        <input id="new-hostname-name" type="text" name="hostname" size="20" />
+        <button
+          class="absolute bottom-6 right-16 bg-red-500 py-4 px-10 rounded-xl text-white"
+          onclick="closeAddHostNameDialog()"
+        >
+          CANCEL
+        </button>
+      </div>
+    </div>
+    <template id="attributes-table">
+      <link href="output.css" rel="stylesheet" />
+      <div>
+        <div
+          class="asset-container p-5 bg-gray-100 border border-solid border-gray-400 border-1 rounded-t-lg border-b-0 ml-10 mt-5 w-5/6"
+        >
+          <div class="flex flex-row border-b-2 border-black border-solid">
+            <div class="text-2xl font-bold basis-1/12">Method</div>
+            <div class="text-2xl pl-3">
+              Attributes
+              <button
+                class="ml-1 text-indigo-600 font-bold"
+                onclick="openAddAttributesDialog()"
+              >
+                &#x2B;
+              </button>
+            </div>
+          </div>
+          <div class="flex flex-row min-h-72">
+            <div class="basis-1/12">
+              <table>
+                <tbody>
+                  <tr>
+                    <td class="pt-5"><slot name="getMethod">GET</slot></td>
+                  </tr>
+                  <tr>
+                    <td class="pt-2"><slot name="postMethod">POST</slot></td>
+                  </tr>
+                  <tr>
+                    <td class="pt-2"><slot name="putMethod">PUT</slot></td>
+                  </tr>
+                  <tr>
+                    <td class="pt-2">
+                      <slot name="deleteMethod">DELETE</slot>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="pl-3 pt-5 w-11/12">
+              <slot name="attrs">
+                "any", "pick", "vowel", "dinner", "rain", "breathe" "eaten",
+                "magic", "signal", "sense", "both", "lead" "instant", "read",
+                "chicken", "thus", "problem", "growth" "possibly", "should",
+                "freedom", "further", "natural"
+              </slot>
+            </div>
+          </div>
+        </div>
+        <div
+          class="asset-container p-3 bg-gray-100 border border-solid border-gray-400 border-1 border-b-0 ml-10 w-5/6 min-h-40"
+        >
+          <div class="text-2xl font-bold border-b-2 border-black border-solid">
+            Potential Vulnerabilities
+          </div>
+          <slot name="PVs" class="pt-5">PV placeholder</slot>
+        </div>
+        <div
+          class="asset-container p-3 bg-gray-100 border border-solid border-gray-400 border-1 rounded-b-lg ml-10 w-5/6 min-h-40"
+        >
+          <div class="text-2xl font-bold border-b-2 border-black border-solid">
+            Attack Vectors
+          </div>
+          <slot name="AVs" class="pt-5">AV Placeholder</slot>
+        </div>
+      </div>
+    </template>
+  </body>
+  <script type="module" type="text/javascript" src="./index.js"></script>
+  <script type="text/javascript" src="./AttributesTable.js"></script>
+  <script type="text/javascript" src="./functions.js"></script>
+</html>
