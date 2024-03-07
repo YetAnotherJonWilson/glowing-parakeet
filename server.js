@@ -202,7 +202,7 @@ app.post('/update-checked', (req, res, next) => {
   })
 })
 
-app.use(express.static('public'))
+app.use(express.static('app'))
 
 app.listen(port, () => {
   console.log(`Listening on port ${port}`)
