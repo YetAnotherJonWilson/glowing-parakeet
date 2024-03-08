@@ -1,13 +1,24 @@
 import express from 'express'
 import fs from 'fs'
+import path from 'path'
+
 const app = express()
 const port = 3000
+
+const directoryPath = process.argv[2]
+const programPath = path.join(directoryPath, 'program.json')
 
 app.get('/', (req, res) => {
   res.sendFile('./app/index.html', { root: '.' })
 })
 
 app.use(express.json())
+
+app.get('/get-program', (req, res, next) => {
+  res.setHeader('Content-Type', 'application/json')
+  const obj = JSON.parse(fs.readFileSync(programPath, 'utf8'))
+  res.json(JSON.stringify(obj))
+})
 
 app.post('/program-name', (req, res, next) => {
   const obj = JSON.parse(fs.readFileSync('./app/program.json', 'utf8'))
@@ -172,7 +183,6 @@ app.post('/update-checked', (req, res, next) => {
   // 4 get the PV list of objects, and find the correct PV array (where object.key[i] === body.pv)
   for (let i = 0; i < PVKeys.length; i++) {
     if (PVKeys[i] === body.pv) {
-      console.log('getting PVArray')
       PVIndex = i
       PVArray = attrObj.PVList[PVKeys[i]]
     }

@@ -1,4 +1,3 @@
-import program from './program.json' assert { type: 'json' }
 import vectorsMap from './vectorsMap.json' assert { type: 'json' }
 
 const state = {
@@ -13,7 +12,10 @@ const state = {
   selectedAV: '',
 }
 
-function updateState(key, value) {
+async function updateState(key, value) {
+  let program = await getProgram()
+  program = JSON.parse(program)
+
   if (key === 'table') {
     state.table = value
 
@@ -67,12 +69,16 @@ function updateState(key, value) {
 }
 
 // add the program name to the header
-;(function () {
+;(async function () {
+  let program = await getProgram()
+  program = JSON.parse(program)
   document.querySelector('#program-name').innerHTML = program.name
 })()
 
 // add the program's current hostnames, with their attributes tables, to the tree
-;(function () {
+;(async function () {
+  let program = await getProgram()
+  program = JSON.parse(program)
   const topOfList = document.querySelector('#top-of-list')
   let hostnameList = program.tree
   for (let i = hostnameList.length; i > 0; i--) {
@@ -365,12 +371,10 @@ function populateAttributeDetails(e) {
             // Hide/show list of related AV's and update selected PV in state when clicked
             newPV.addEventListener('click', (e) => {
               const allAVs = document.getElementsByClassName(PVClass)
-              console.log('allAVs', allAVs)
               updateState('selectedPV', e.target.innerHTML)
               for (let i = 0; i < allAVs.length; i++) {
                 allAVs[i].classList.toggle('hidden')
               }
-              console.log('after selecting a PV, state is now:', state)
             })
             const AVListObjs = methodAttributes[i].PVList[PVListObjs[j]]
             for (let k = 0; k < AVListObjs.length; k++) {
@@ -429,12 +433,10 @@ function populateAttributeDetails(e) {
             // Hide/show list of related AV's and update selected PV in state when clicked
             newPV.addEventListener('click', (e) => {
               const allAVs = document.getElementsByClassName(PVClass)
-              console.log('allAVs', allAVs)
               updateState('selectedPV', e.target.innerHTML)
               for (let i = 0; i < allAVs.length; i++) {
                 allAVs[i].classList.toggle('hidden')
               }
-              console.log('after selecting a PV, state is now:', state)
             })
             const AVListObjs = methodAttributes[i].PVList[PVListObjs[j]]
             for (let k = 0; k < AVListObjs.length; k++) {
@@ -494,12 +496,10 @@ function populateAttributeDetails(e) {
             // Hide/show list of related AV's and update selected PV in state when clicked
             newPV.addEventListener('click', (e) => {
               const allAVs = document.getElementsByClassName(PVClass)
-              console.log('allAVs', allAVs)
               updateState('selectedPV', e.target.innerHTML)
               for (let i = 0; i < allAVs.length; i++) {
                 allAVs[i].classList.toggle('hidden')
               }
-              console.log('after selecting a PV, state is now:', state)
             })
             const AVListObjs = methodAttributes[i].PVList[PVListObjs[j]]
             for (let k = 0; k < AVListObjs.length; k++) {
@@ -559,12 +559,10 @@ function populateAttributeDetails(e) {
             // Hide/show list of related AV's and update selected PV in state when clicked
             newPV.addEventListener('click', (e) => {
               const allAVs = document.getElementsByClassName(PVClass)
-              console.log('allAVs', allAVs)
               updateState('selectedPV', e.target.innerHTML)
               for (let i = 0; i < allAVs.length; i++) {
                 allAVs[i].classList.toggle('hidden')
               }
-              console.log('after selecting a PV, state is now:', state)
             })
             const AVListObjs = methodAttributes[i].PVList[PVListObjs[j]]
             for (let k = 0; k < AVListObjs.length; k++) {

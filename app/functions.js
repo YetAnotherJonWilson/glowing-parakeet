@@ -1,3 +1,15 @@
+async function getProgram() {
+  const url = new URL('http://localhost:3000/get-program')
+  let data = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+    },
+  }).then((res) => res.json())
+  return data
+}
+
 async function addNewHostname(location, newHostname) {
   // add new hostname only needs to update program.json
   // something like the following
