@@ -12,9 +12,17 @@ const state = {
   selectedAV: '',
 }
 
+;(async function () {
+  const program = await getProgram().then((program) => JSON.parse(program))
+  getName(program)
+  addHostnames(program)
+  addToggles()
+  createAttributesList()
+  addCloseDialog()
+})()
+
 async function updateState(key, value) {
-  let program = await getProgram()
-  program = JSON.parse(program)
+  const program = await getProgram().then((program) => JSON.parse(program))
 
   if (key === 'table') {
     state.table = value
@@ -69,16 +77,12 @@ async function updateState(key, value) {
 }
 
 // add the program name to the header
-;(async function () {
-  let program = await getProgram()
-  program = JSON.parse(program)
+function getName(program) {
   document.querySelector('#program-name').innerHTML = program.name
-})()
+}
 
 // add the program's current hostnames, with their attributes tables, to the tree
-;(async function () {
-  let program = await getProgram()
-  program = JSON.parse(program)
+function addHostnames(program) {
   const topOfList = document.querySelector('#top-of-list')
   let hostnameList = program.tree
   for (let i = hostnameList.length; i > 0; i--) {
@@ -176,71 +180,78 @@ async function updateState(key, value) {
     topOfList.insertAdjacentElement('afterend', newAttributesTable)
     topOfList.insertAdjacentElement('afterend', newHostname)
   }
-})()
+}
 
 // add toggle functionality to all hostnames in the tree
-const toggle = document.getElementsByClassName('asset')
-for (let i = 0; i < toggle.length; i++) {
-  toggle[i].addEventListener('click', function (e) {
-    // only toggle if the hostname is clicked, not the plus sign next to it
-    if (e.target.tagName !== 'SPAN') {
-      const newId = e.target.innerHTML.split('<span>')[0]
-      const tableToShowHide = document.getElementById(newId)
-      // if it is not hidden, hide it, else hide all others, and then unhide this one
-      if (!tableToShowHide.classList.contains('hidden')) {
-        tableToShowHide.classList.add('hidden')
-        updateState('table', 'none')
-      } else {
-        const allAttributeTables = document.querySelectorAll('attributes-table')
-        for (let i = 0; i < allAttributeTables.length; i++) {
-          if (!allAttributeTables[i].classList.contains('hidden')) {
-            allAttributeTables[i].classList.add('hidden')
+function addToggles() {
+  const toggle = document.getElementsByClassName('asset')
+  for (let i = 0; i < toggle.length; i++) {
+    console.log('adding toggles')
+    toggle[i].addEventListener('click', function (e) {
+      console.log('clicked the toggle ')
+      // only toggle if the hostname is clicked, not the plus sign next to it
+      if (e.target.tagName !== 'SPAN') {
+        const newId = e.target.innerHTML.split('<span>')[0]
+        const tableToShowHide = document.getElementById(newId)
+        // if it is not hidden, hide it, else hide all others, and then unhide this one
+        if (!tableToShowHide.classList.contains('hidden')) {
+          tableToShowHide.classList.add('hidden')
+          updateState('table', 'none')
+        } else {
+          const allAttributeTables =
+            document.querySelectorAll('attributes-table')
+          for (let i = 0; i < allAttributeTables.length; i++) {
+            if (!allAttributeTables[i].classList.contains('hidden')) {
+              allAttributeTables[i].classList.add('hidden')
+            }
           }
+          // first populate the attributes list for the get method (selected by default)
+          updateState('table', newId)
+          const attrsDiv = document.getElementById(`${newId}-attrsList`)
+          getSelectedMethodsAttributes(attrsDiv, 'get')
+          tableToShowHide.classList.remove('hidden')
         }
-        // first populate the attributes list for the get method (selected by default)
-        updateState('table', newId)
-        const attrsDiv = document.getElementById(`${newId}-attrsList`)
-        getSelectedMethodsAttributes(attrsDiv, 'get')
-        tableToShowHide.classList.remove('hidden')
       }
-    }
-  })
+    })
+  }
 }
 
 // populate the selectable url attributes list
-const attributesList = document.querySelector('#attributes-list-header')
-const listDiv = document.createElement('div')
-listDiv.classList.add('flex', 'flex-wrap')
-listDiv.setAttribute('id', 'attributes-list')
-attributesList.insertAdjacentElement('afterend', listDiv)
-const totalAttributes = Object.keys(vectorsMap.Attributes)
-for (let i = 0; i < totalAttributes.length; i++) {
-  const nextAttribute = document.createElement('button')
-  nextAttribute.innerHTML = totalAttributes[i]
-  nextAttribute.classList.add('ml-4', 'mt-4', 'font-bold', 'text-slate-800')
-  nextAttribute.addEventListener('click', (e) => {
-    if (e.target.classList.contains('text-slate-800')) {
-      e.target.classList.remove('text-slate-800')
-      e.target.classList.add('text-green-700')
-      e.target.classList.add('text-xl')
-    } else if (e.target.classList.contains('text-green-700')) {
-      e.target.classList.remove('text-green-700')
-      e.target.classList.add('text-red-700')
-    } else if (e.target.classList.contains('text-red-700')) {
-      e.target.classList.remove('text-red-700')
-      e.target.classList.remove('text-xl')
-      e.target.classList.add('text-slate-800')
-    }
-  })
-  listDiv.insertAdjacentElement('beforeend', nextAttribute)
+function createAttributesList() {
+  const attributesList = document.querySelector('#attributes-list-header')
+  const listDiv = document.createElement('div')
+  listDiv.classList.add('flex', 'flex-wrap')
+  listDiv.setAttribute('id', 'attributes-list')
+  attributesList.insertAdjacentElement('afterend', listDiv)
+  const totalAttributes = Object.keys(vectorsMap.Attributes)
+  for (let i = 0; i < totalAttributes.length; i++) {
+    const nextAttribute = document.createElement('button')
+    nextAttribute.innerHTML = totalAttributes[i]
+    nextAttribute.classList.add('ml-4', 'mt-4', 'font-bold', 'text-slate-800')
+    nextAttribute.addEventListener('click', (e) => {
+      if (e.target.classList.contains('text-slate-800')) {
+        e.target.classList.remove('text-slate-800')
+        e.target.classList.add('text-green-700')
+        e.target.classList.add('text-xl')
+      } else if (e.target.classList.contains('text-green-700')) {
+        e.target.classList.remove('text-green-700')
+        e.target.classList.add('text-red-700')
+      } else if (e.target.classList.contains('text-red-700')) {
+        e.target.classList.remove('text-red-700')
+        e.target.classList.remove('text-xl')
+        e.target.classList.add('text-slate-800')
+      }
+    })
+    listDiv.insertAdjacentElement('beforeend', nextAttribute)
+  }
 }
 
 // add Close Dialog function to Add Attributes OK button
-;(function () {
+function addCloseDialog() {
   document.querySelector('#add-attributes-ok').addEventListener('click', () => {
     closeAddAttributesDialog()
   })
-})()
+}
 
 function selectMethod(hostname, method) {
   // when a GET/POST/PUT/DELETE method is clicked, we display the attributes list for that method, *for that hostname*

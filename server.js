@@ -21,16 +21,16 @@ app.get('/get-program', (req, res, next) => {
 })
 
 app.post('/program-name', (req, res, next) => {
-  const obj = JSON.parse(fs.readFileSync('./app/program.json', 'utf8'))
+  const obj = JSON.parse(fs.readFileSync(programPath, 'utf8'))
   obj.name = req.body?.name
   let newObj = JSON.stringify(obj)
-  fs.writeFile('./app/program.json', newObj, 'utf8', () => {
+  fs.writeFile(programPath, newObj, 'utf8', () => {
     res.send('File written')
   })
 })
 
 app.post('/add-branch', (req, res, next) => {
-  const obj = JSON.parse(fs.readFileSync('./app/program.json', 'utf8'))
+  const obj = JSON.parse(fs.readFileSync(programPath, 'utf8'))
 
   // FIRST, make sure req?.body.newHostname is not an empty string
   if (!req?.body?.newHostname || req?.body.newHostname === '') {
@@ -69,13 +69,13 @@ app.post('/add-branch', (req, res, next) => {
   ]
   obj.tree = newObjTree
   let newObj = JSON.stringify(obj)
-  fs.writeFile('./app/program.json', newObj, 'utf8', () => {
+  fs.writeFile(programPath, newObj, 'utf8', () => {
     res.send('File written')
   })
 })
 
 app.post('/add-attributes', (req, res, next) => {
-  const obj = JSON.parse(fs.readFileSync('./app/program.json', 'utf8'))
+  const obj = JSON.parse(fs.readFileSync(programPath, 'utf8'))
   const vectorsMap = JSON.parse(
     fs.readFileSync('./app/vectorsMap.json', 'utf8')
   )
@@ -147,13 +147,13 @@ app.post('/add-attributes', (req, res, next) => {
 
   obj.tree[objTreeIndex][req.body.state.method] = methodList
   let newObj = JSON.stringify(obj)
-  fs.writeFile('./app/program.json', newObj, 'utf8', () => {
+  fs.writeFile(programPath, newObj, 'utf8', () => {
     res.send('File written')
   })
 })
 
 app.post('/update-checked', (req, res, next) => {
-  const obj = JSON.parse(fs.readFileSync('./app/program.json', 'utf8'))
+  const obj = JSON.parse(fs.readFileSync(programPath, 'utf8'))
   const body = req.body
   let methodArray = []
   let attrObj
@@ -207,7 +207,7 @@ app.post('/update-checked', (req, res, next) => {
     }
   }
   let newObj = JSON.stringify(obj)
-  fs.writeFile('./app/program.json', newObj, 'utf8', () => {
+  fs.writeFile(programPath, newObj, 'utf8', () => {
     res.send('File written')
   })
 })
